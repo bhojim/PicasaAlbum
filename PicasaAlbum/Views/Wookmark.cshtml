@@ -1,0 +1,89 @@
+﻿@using PicasaAlbum.Models
+@{
+    Script.Require("jQuery").AtHead();
+    Script.Require("picasaAlbum").AtHead();
+    Script.Require("jqueryImagesLoaded").AtHead();
+    Script.Require("jqueryColorbox").AtHead();
+    Script.Require("wookmark").AtHead();
+     
+    Script.Require("jsrender").AtHead();
+    Style.Require("colorbox");
+    Style.Require("bootstrap");
+}
+
+<h1 id="picasaTitle"></h1>
+<div id="main" role="main" style="position:relative">
+   <ul id="tiles">
+   </ul>
+</div>
+
+<script id="album-template" type="text/x-jsrender">
+    <div class="album-cover">
+        <div class="album-cover-frame">
+            <a class="thumb" href="#" album="{{:albumId}}" title="{{:title}}">
+            <img src="{{:url}}">
+            </a>
+        </div>
+        <div class="album-cover-title">
+            <a class="link" href="#" album="{{:albumId}}"><span>{{:title}}</span>
+            </a>
+        </div>
+    </div>
+</script>
+
+<script id="photo-template" type="text/x-jsrender">
+        <li>
+          <a href="{{:url}}" rel="lightbox">
+            <img src="{{:thumb.url}}">
+          </a>
+          <p>{{:desc}}</p>
+        </li>
+
+</script>
+
+@{
+    string action = @Model.SelectedRequestType.ToString();
+    string orientation = @Model.SliderOrientation == Orientation.Horizontal ? "horizontal" : "vertical";
+}
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("div").picasaAlbum({
+            action: "@action",
+            maxImages: @Model.MaxImages,
+            userid: "@Model.UserName",
+            albumName: "@Model.AlbumName",
+            thumbsize: 200,
+            imageSize: @Model.PhotoSize,
+            titleContainer: "#picasaTitle",
+            subtitleContainer: "#picasaSubtitle",
+            photoContainer: "#tiles",
+            photoTemplate: "#photo-template",
+            albumContainer: "#gallery-links-container",
+            albumTemplate: "#album-template",
+            callback: function () {
+                var options = {
+                    autoResize: true, // This will auto-update the layout when the browser window is resized.
+                    container: $('#main'), // Optional, used for some extra CSS styling
+                    offset: 2, // Optional, the distance between grid items
+                    itemWidth: 200
+                };
+                // Get a reference to your grid items.
+                var handler = $('#tiles li');
+
+                // Init lightbox
+                $('a', handler).colorbox({
+                    rel: 'lightbox'
+                });
+
+                // Call the layout function after all images have loaded
+                $('#tiles').imagesLoaded(function () {
+                    handler.wookmark(options);
+                });
+            }
+        });
+    });
+</script>
+

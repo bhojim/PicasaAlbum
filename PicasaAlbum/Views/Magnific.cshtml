@@ -1,0 +1,72 @@
+﻿@using PicasaAlbum.Models
+@{
+    Script.Require("jQuery").AtHead();
+    Script.Require("picasaAlbum").AtHead();
+    Script.Require("magnific").AtHead();
+    Script.Require("jsrender").AtHead();
+    Style.Require("magnific");
+    Style.Require("bootstrap");
+}
+    <div id="gallery-links-container"></div>
+    <h1 id="picasaTitle"></h1>
+<div class="popup-gallery">
+</div>
+
+<script id="album-template" type="text/x-jsrender">
+    <div class="album-cover">
+        <div class="album-cover-frame">
+            <a class="thumb" href="#" album="{{:albumId}}" title="{{:title}}">
+            <img src="{{:url}}">
+            </a>
+        </div>
+        <div class="album-cover-title">
+            <a class="link" href="#" album="{{:albumId}}"><span>{{:title}}</span>
+            </a>
+        </div>
+    </div>
+</script>
+
+<script id="photo-template" type="text/x-jsrender">
+  <a href="{{:url}}" title="{{:desc}}">
+    <img src="{{:thumb.url}}" alt="{{:desc}}" style="{{:style}}">
+  </a>
+
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("div").picasaAlbum({
+            action: "@Model.SelectedRequestType",
+            userid: "@Model.UserName",
+            albumName: "@Model.AlbumName",
+            maxImages: @Model.MaxImages,
+            imageSize: @Model.PhotoSize,
+            titleContainer: "#picasaTitle",
+            subtitleContainer: "#picasaSubtitle",
+            photoContainer: ".popup-gallery",
+            photoTemplate: "#photo-template",
+            albumContainer: "#gallery-links-container",
+            albumTemplate: "#album-template",
+            callback: function () {
+                $('.popup-gallery').magnificPopup({
+                    delegate: 'a',
+                    type: 'image',
+                    tLoading: 'Loading image ...',
+                    mainClass: 'mfp-img-mobile',
+                    gallery: {
+                        enabled: true,
+                        navigateByImgClick: true,
+                        preload: [0, 1] // Will preload 0 - before current, and 1 after the current image
+                    },
+                    image: {
+                        tError: 'The image could not be loaded.',
+                        titleSrc: function (item) {
+                            return item.el.attr('title');
+                        }
+                    }
+                });
+            }
+
+        });
+    });
+</script>

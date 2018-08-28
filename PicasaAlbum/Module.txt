@@ -1,0 +1,11 @@
+﻿Name: PicasaAlbum
+AntiForgery: enabled
+Author: Bernard Ho-Jim
+Website: http://www.dotnetcomp.com
+Version: 1.1
+OrchardVersion: 1.1
+Description: A module (widget) that shows Picasa albums and photos using SlimBox or Royal Slider.
+Features:
+    PicasaAlbum:
+        Description: A module (widget) that shows Picasa albums and photos using various image gallery plugins.
+        Category: Widget

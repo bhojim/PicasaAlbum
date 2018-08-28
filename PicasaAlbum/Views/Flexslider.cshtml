@@ -1,0 +1,92 @@
+﻿@using PicasaAlbum.Models
+@{
+    Script.Require("jQuery").AtHead();
+    Script.Require("picasaAlbum").AtHead();
+    Script.Require("jqueryFlexslider").AtHead();
+    Script.Require("jsrender").AtHead();
+
+    Style.Require("flexsliderdemo");
+    Style.Require("flexslider");
+}
+<h1 id="picasaTitle"></h1>
+<div id="container" class="cf">
+    <header role="navigation"></header>
+    <div id="main" role="main">
+        <section class="slider">
+            <div id="slider" class="flexslider">
+                <ul id="slides" class="slides">
+                </ul>
+            </div>
+            <div id="carousel" class="flexslider">
+<!--                <ul id="slides1" class="slides">
+                </ul>-->
+            </div>
+        </section>
+    </div>
+</div>
+
+
+<script id="album-template" type="text/x-jsrender">
+    <div class="album-cover">
+        <div class="album-cover-frame">
+            <a class="thumb" href="#" album="{{:albumId}}" title="{{:title}}">
+            <img src="{{:url}}">
+            </a>
+        </div>
+        <div class="album-cover-title">
+            <a class="link" href="#" album="{{:albumId}}"><span>{{:title}}</span>
+            </a>
+        </div>
+    </div>
+</script>
+
+<script id="photo-template" type="text/x-jsrender">
+    <li>
+  	    <img src="{{:url}}" />
+  	</li>
+</script>
+
+@{
+    string action = @Model.SelectedRequestType.ToString();
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("div").picasaAlbum({
+            action: "@action",
+            userid: "@Model.UserName",
+            albumName: "@Model.AlbumName",
+            maxImages: @Model.MaxImages,
+            thumbsize: 160,
+            imageSize: 640,
+//            topic: "@Model.TopicName",
+            titleContainer: "#picasaTitle",
+            subtitleContainer: "#picasaSubtitle",
+            photoContainer: "#slides",
+            photoTemplate: "#photo-template",
+            albumContainer: "#gallery-links-container",
+            albumTemplate: "#album-template",
+            callback: function () {
+                $("#slides").clone().appendTo("#carousel");
+                $('#carousel').flexslider({
+                    animation: "slide",
+                    controlNav: false,
+                    animationLoop: false,
+                    slideshow: false,
+                    itemWidth: 210,
+                    itemMargin: 5,
+                    asNavFor: '#slider'
+                });
+                $('#slider').flexslider({
+                    animation: "slide",
+                    controlNav: false,
+                    animationLoop: false,
+                    slideshow: false,
+                    sync: "#carousel"
+                });
+            }
+
+        });
+    });
+</script>
+

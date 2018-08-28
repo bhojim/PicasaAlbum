@@ -1,0 +1,108 @@
+﻿@model PicasaAlbum.Models.PicasaAlbumWidgetPart
+
+
+
+<fieldset>
+  <legend>Picasa Album Widget</legend>
+            
+
+  <div class="editor-label">
+    @Html.LabelFor(model => model.SelectedPlugin, @T("Image gallery plugin"))
+  </div>
+  <div class="editor-field">
+    @Html.DropDownListFor(model => model.SelectedPlugin, Model.AvailablePlugins, new { @id = "ddlPlugins" })
+  </div>
+
+  <div class="editor-label">
+    @Html.LabelFor(o => o.SelectedRequestType, @T("Type of request"))
+  </div>
+  <div class="editor-field">
+    @Html.DropDownListFor(o => o.SelectedRequestType, Model.AvailableRequestTypes, new { @id = "ddlRequestTypes" })
+  </div>
+
+  <div id="UserName">
+      <div class="editor-label">
+        @Html.LabelFor(model => model.UserName)
+      </div>
+      <div class="editor-field">
+        @Html.TextBoxFor(model => model.UserName)
+        @Html.ValidationMessageFor(model => model.UserName)
+      </div>
+  </div>
+  <div id="Album">
+      <div class="editor-label">
+        @Html.LabelFor(model => model.AlbumName)
+      </div>
+      <div class="editor-field">
+        @Html.TextBoxFor(model => model.AlbumName)
+        @Html.ValidationMessageFor(model => model.AlbumName)
+      </div>
+  </div>
+    <div class="editor-label">
+    @Html.LabelFor(model => model.SliderType)
+    </div>
+    <div class="editor-field">
+    @Html.DropDownListFor(o => o.SliderType, Model.AvailableSliderTypes)
+    </div>
+
+      <div class="editor-label">
+        @Html.LabelFor(o => o.MaxImages)
+      </div>
+      <div class="editor-field">
+        @Html.TextBoxFor(o => o.MaxImages)
+      </div>
+
+            
+  <div>
+      <div class="editor-label">
+        @Html.LabelFor(o => o.ThumbSize)
+      </div>
+      <div class="editor-field">
+        @Html.DropDownListFor(o => o.ThumbSize, Model.AvailableThumbSizes)
+      </div>
+
+      <div class="editor-label">
+        @Html.LabelFor(o => o.PhotoSize)
+      </div>
+      <div class="editor-field">
+        @Html.TextBoxFor(o => o.PhotoSize)
+      </div>
+
+      <div class="editor-label">
+        @Html.LabelFor(o => o.SliderOrientation )
+      </div>
+      <div class="editor-field">
+        @Html.DropDownListFor(o => o.SliderOrientation, Model.AvailableOrientations)
+      </div>
+</div>
+</fieldset>
+
+@using (Script.Foot())
+{
+<script type="text/javascript">
+    $(document).ready(function () {
+        var requestType = $("select#ddlRequestTypes").val();
+        if (requestType == "loadAlbums") {
+            $("#UserName").show();
+            $("#Album").hide();
+        }
+        else if (requestType == "loadAlbum") {
+            $("#UserName").show();
+            $("#Album").show();
+        }
+
+        $("select#ddlRequestTypes").change(function () {
+            var requestType = $(this).val();
+            if (requestType == "loadAlbums") {
+                $("#UserName").show();
+                $("#Album").hide();
+              }
+            else if (requestType == "loadAlbum") {
+                $("#UserName").show();
+                $("#Album").show();
+            }
+
+        });
+    });
+</script>
+}

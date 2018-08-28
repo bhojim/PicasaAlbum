@@ -1,0 +1,106 @@
+﻿@using PicasaAlbum.Models
+@{
+        Script.Require("jQuery").AtHead();
+        Script.Require("jqueryRoyalSlider").AtHead();
+        Script.Require("picasaAlbum").AtHead();
+        Script.Require("jsrender").AtHead();
+        Style.Require("royalslider");
+        Style.Require("rsdefault");
+        Style.Require("bootstrap");
+}
+<h1 id="picasaTitle"></h1>
+<pre id="picasaSubtitle"></pre>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div id="picasaPhotos" class="royalSlider rsDefault">
+            </div>
+        </div>
+        <div id="gallery-links-container" class="col-md-2">
+        </div>
+    </div>
+</div>
+
+<script id="album-template" type="text/x-jsrender">
+    <div class="album-cover">
+        <div class="album-cover-frame">
+            <a class="thumb" href="#" album="{{:albumId}}" title="{{:title}}">
+            <img src="{{:url}}">
+            </a>
+        </div>
+        <div class="album-cover-title">
+            <a class="link" href="#" album="{{:albumId}}"><span>{{:title}}</span>
+            </a>
+        </div>
+    </div>
+</script>
+
+<script id="photo-template" type="text/x-jsrender">
+    <div>
+        <a class="rsImg" href="{{:url}}" title="{{:desc}}">
+            <figcaption>{{:desc}}</figcaption>
+            <img src="{{:thumb.url}}" alt="{{:desc}}" class="rsTmb" />
+        </a>
+    </div>
+</script>
+
+@{
+    string action = @Model.SelectedRequestType.ToString();
+    string orientation = @Model.SliderOrientation == Orientation.Horizontal ? "horizontal" : "vertical";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("div").picasaAlbum({
+            action: "@action",
+            userid: "@Model.UserName",
+            albumName: "@Model.AlbumName",
+            imageSize: 912,
+            //thumbsize: 64,
+            maxImages: @Model.MaxImages,
+            titleContainer: "#picasaTitle",
+            subtitleContainer: "#picasaSubtitle",
+            photoContainer: "#picasaPhotos",
+            photoTemplate: "#photo-template",
+            albumContainer: "#gallery-links-container",
+            albumTemplate: "#album-template",
+            initialize: function () {
+                var $wrapper = $('#picasaPhotos').addClass('royalSlider rsDefault');
+                var mySliderInstance = $("#picasaPhotos").data("royalSlider");
+                if (mySliderInstance) {
+                    mySliderInstance.destroy();
+                }
+            },
+            callback: function () {
+                var mySliderInstance = $("#picasaPhotos").royalSlider({
+                    fullscreen: {
+                        enabled: true,
+                        nativeFS: true
+                    },
+                    controlNavigation: 'thumbnails',
+                    autoScaleSlider: true,
+                    autoScaleSliderWidth: 1300,     //960
+                    autoScaleSliderHeight: 1200,    //850
+                    loop: false,
+                    imageScaleMode: 'fit-if-smaller',
+                    slidesOrientation: '@orientation',
+                    navigateByClick: true,
+                    numImagesToPreload: 2,
+                    arrowsNav: true,
+                    arrowsNavAutoHide: true,
+                    arrowsNavHideOnTouch: true,
+                    keyboardNavEnabled: true,
+                    fadeinLoadedSlide: true,
+                    globalCaption: true,
+                    globalCaptionInside: false,
+                    thumbs: {
+                        appendSpan: true,
+                        firstMargin: true,
+                        paddingBottom: 4
+                    }
+                });
+            }
+
+        });
+    });
+</script>

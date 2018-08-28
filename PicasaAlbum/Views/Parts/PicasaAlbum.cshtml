@@ -1,0 +1,49 @@
+﻿@using PicasaAlbum.Models
+@{
+    PicasaAlbum obj = new PicasaAlbum();
+    obj.UserName = Model.UserName;
+    obj.AlbumName = Model.AlbumName;
+    obj.TopicName = Model.TopicName;
+    obj.SliderType = Model.SliderType;
+    obj.SelectedRequestType = Model.SelectedRequestType;
+    obj.SelectedPlugin = Model.SelectedPlugin;
+    obj.MaxImages = Model.MaxImages;
+    obj.ThumbSize = Model.ThumbSize;
+    obj.PhotoSize = Model.PhotoSize;
+    obj.SliderOrientation = Model.SliderOrientation;
+
+    Plugin selectedPlugin = (Plugin)Model.SelectedPlugin;
+    switch (selectedPlugin)
+    {
+        //case Plugin.RoyalSlider:
+        //    Html.RenderPartial("RoyalSlider", obj);
+        //    break;
+        case Plugin.Wookmark:
+            Html.RenderPartial("Wookmark", obj);
+            break;
+        case Plugin.Jssor:
+            switch (obj.SliderType)
+            {
+                case SliderTypeEnum.VerticalThumbnails:   
+                    Html.RenderPartial("JssorVertThumbs", obj);
+                    break;
+                case SliderTypeEnum.FullWindow:
+                    Html.RenderPartial("JssorFullWindow", obj);
+                    break;
+                default:
+                    Html.RenderPartial("Jssor", obj);
+                    break;
+            }
+            break;
+        case Plugin.FlexSlider:
+            Html.RenderPartial("Flexslider", obj);
+            break;
+        case Plugin.Magnific:
+            Html.RenderPartial("Magnific", obj);
+            break;
+        default:    // Slimbox
+            Html.RenderPartial("Slimbox", obj);
+            break;            
+    }
+        
+}

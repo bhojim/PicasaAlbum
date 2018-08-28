@@ -1,0 +1,69 @@
+﻿@using PicasaAlbum.Models
+@{
+    Script.Require("jQuery").AtHead();
+    Script.Require("picasaAlbum").AtHead();
+    Script.Require("slimbox2").AtHead();
+    Script.Require("jsrender").AtHead();
+    Style.Require("slimbox2");
+    Style.Require("bootstrap");
+}
+    <p>Royal Slider</p>
+    <h1 id="picasaTitle"></h1>
+    <pre id="picasaSubtitle"></pre>
+    <div class="container">
+        <div class="row">
+            <div id="gallery-links-container" class="col-md-2">
+            </div>
+            <div id="picasaPhotos">
+            </div>
+        </div>
+     </div>
+
+<script id="album-template" type="text/x-jsrender">
+    <div class="album-cover">
+        <div class="album-cover-frame">
+            <a class="thumb" href="#" album="{{:albumId}}" title="{{:title}}">
+            <img src="{{:url}}">
+            </a>
+        </div>
+        <div class="album-cover-title">
+            <a class="link" href="#" album="{{:albumId}}"><span>{{:title}}</span>
+            </a>
+        </div>
+    </div>
+</script>
+
+<script id="photo-template" type="text/x-jsrender">
+  <a href="{{:url}}" title="{{:desc}}">
+    <img src="{{:thumb.url}}" alt="{{:desc}}" style="{{:style}}">
+  </a>
+</script>
+
+@{
+    string action = @Model.SelectedRequestType.ToString();;
+    string orientation = @Model.SliderOrientation == Orientation.Horizontal ? "horizontal" : "vertical";
+}
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+                $("div").picasaAlbum({
+                    color: "orange",
+                    backgroundColor: "black",
+                    action: "@action",
+                    userid: "@Model.UserName",
+                    albumName: "@Model.AlbumName",
+                    topic: "@Model.TopicName",
+                    maxImages: @Model.MaxImages,
+                    titleContainer: "#picasaTitle",
+                    subtitleContainer: "#picasaSubtitle",
+                    photoContainer: "#picasaPhotos",
+                    photoTemplate: "#photo-template",
+                    albumContainer: "#gallery-links-container",
+                    albumTemplate: "#album-template",
+                    callback: function () {
+                        $("#picasaPhotos a").slimbox();
+                    }
+                });
+    });
+</script>
